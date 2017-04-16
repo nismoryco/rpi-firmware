@@ -263,6 +263,30 @@ Params: 24db_digital_gain       Allow gain to be applied via the PCM512x codec
                                 that does not result in clipping/distortion!)
 
 
+Name:   allo-boss-dac-pcm512x-audio
+Info:   Configures the Allo Boss DAC audio cards.
+Load:   dtoverlay=allo-boss-dac-pcm512x-audio,<param>
+Params: 24db_digital_gain       Allow gain to be applied via the PCM512x codec
+                                Digital volume control. Enable with
+                                "dtoverlay=allo-boss-dac-pcm512x-audio,
+                                24db_digital_gain"
+                                (The default behaviour is that the Digital
+                                volume control is limited to a maximum of
+                                0dB. ie. it can attenuate but not provide
+                                gain. For most users, this will be desired
+                                as it will prevent clipping. By appending
+                                the 24db_digital_gain parameter, the Digital
+                                volume control will allow up to 24dB of
+                                gain. If this parameter is enabled, it is the
+                                responsibility of the user to ensure that
+                                the Digital volume control is set to a value
+                                that does not result in clipping/distortion!)
+        slave                   Force Boss DAC into slave mode, using Pi a
+                                master for bit clock and frame clock. Enable
+                                with "dtoverlay=allo-boss-dac-pcm512x-audio,
+                                slave"
+
+
 Name:   allo-piano-dac-pcm512x-audio
 Info:   Configures the Allo Piano DAC (2.0/2.1) audio cards.
         (NB. This initial support is for 2.0 channel audio ONLY! ie. stereo.
@@ -281,6 +305,27 @@ Params: 24db_digital_gain       Allow gain to be applied via the PCM512x codec
                                 responsibility of the user to ensure that
                                 the Digital volume control is set to a value
                                 that does not result in clipping/distortion!)
+
+
+Name:   allo-piano-dac-plus-pcm512x-audio
+Info:   Configures the Allo Piano DAC (2.1) audio cards.
+Load:   dtoverlay=allo-piano-dac-plus-pcm512x-audio,<param>
+Params: 24db_digital_gain       Allow gain to be applied via the PCM512x codec
+                                Digital volume control.
+                                (The default behaviour is that the Digital
+                                volume control is limited to a maximum of
+                                0dB. ie. it can attenuate but not provide
+                                gain. For most users, this will be desired
+                                as it will prevent clipping. By appending
+                                the 24db_digital_gain parameter, the Digital
+                                volume control will allow up to 24dB of
+                                gain. If this parameter is enabled, it is the
+                                responsibility of the user to ensure that
+                                the Digital volume control is set to a value
+                                that does not result in clipping/distortion!)
+        glb_mclk                This option is only with Kali board. If enabled,
+                                MCLK for Kali is used and PLL is disabled for
+                                better voice quality. (default Off)
 
 
 Name:   at86rf233
@@ -388,9 +433,6 @@ Params: dr_mode                 Dual role mode: "host", "peripheral" or "otg"
         g-np-tx-fifo-size       Size of non-periodic tx fifo size in gadget
                                 mode
 
-        g-tx-fifo-size          Size of periodic tx fifo per endpoint
-                                (except ep0) in gadget mode
-
 
 [ The ds1307-rtc overlay has been deleted. See i2c-rtc. ]
 
@@ -414,6 +456,12 @@ Params: int_pin                 GPIO used for INT (default 39)
 Name:   fe-pi-audio
 Info:   Configures the Fe-Pi Audio Sound Card
 Load:   dtoverlay=fe-pi-audio
+Params: <None>
+
+
+Name:   googlevoicehat-soundcard
+Info:   Configures the Google voiceHAT soundcard
+Load:   dtoverlay=googlevoicehat-soundcard
 Params: <None>
 
 
@@ -607,6 +655,11 @@ Load:   dtoverlay=i2c-sensor,<param>=<val>
 Params: bmp085                  Select the Bosch sensortronic BMP085
 
         bmp280                  Select the Bosch sensortronic BMP280
+
+        lm75                    Select the Maxim LM75 temperature sensor
+
+        lm75addr                Choose the address for the LM75 (0x48-0x4f -
+                                default 0x4f)
 
         si7020                  Select the Silicon Labs Si7013/20/21 humidity/
                                 temperature sensor
