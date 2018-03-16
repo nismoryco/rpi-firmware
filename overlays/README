@@ -89,6 +89,10 @@ Params:
         audio                   Set to "on" to enable the onboard ALSA audio
                                 interface (default "off")
 
+        eee                     Enable Energy Efficient Ethernet support for
+                                compatible devices (default "on"). See also
+                                "tx_lpi_timer".
+
         i2c_arm                 Set to "on" to enable the ARM's i2c interface
                                 (default "off")
 
@@ -124,6 +128,10 @@ Params:
                                 SD card (default 1)
 
         sd_debug                Enable debug output from SD driver (default off)
+
+        tx_lpi_timer            Set the delay in microseconds between going idle
+                                and entering the low power state (default 600).
+                                Requires EEE to be enabled - see "eee".
 
         uart0                   Set to "off" to disable uart0 (default "on")
 
@@ -357,8 +365,9 @@ Params: interrupt               GPIO used for INT (default 23)
 
 Name:   audioinjector-addons
 Info:   Configures the audioinjector.net audio add on soundcards
-Load:   dtoverlay=audioinjector-addons
-Params: <None>
+Load:   dtoverlay=audioinjector-addons,<param>=<val>
+Params: non-stop-clocks         Keeps the clocks running even when the stream
+                                is paused or stopped (default off)
 
 
 Name:   audioinjector-wm8731-audio
@@ -1182,6 +1191,13 @@ Load:   dtoverlay=pi3-miniuart-bt
 Params: <None>
 
 
+Name:   pibell
+Info:   Configures the pibell audio card.
+Load:   dtoverlay=pibell,<param>=<val>
+Params: alsaname                Set the name as it appears in ALSA (default
+                                "PiBell")
+
+
 Name:   piscreen
 Info:   PiScreen display by OzzMaker.com
 Load:   dtoverlay=piscreen,<param>=<val>
@@ -1279,7 +1295,10 @@ Info:   Configures the pps-gpio (pulse-per-second time signal via GPIO).
 Load:   dtoverlay=pps-gpio,<param>=<val>
 Params: gpiopin                 Input GPIO (default "18")
         assert_falling_edge     When present, assert is indicated by a falling
-                                edge, rather than by a rising edge
+                                edge, rather than by a rising edge (default
+                                off)
+        capture_clear           Generate clear events on the trailing edge
+                                (default off)
 
 
 Name:   pwm
@@ -1341,12 +1360,6 @@ Load:   dtoverlay=qca7000,<param>=<val>
 Params: int_pin                 GPIO pin for interrupt signal (default 23)
 
         speed                   SPI bus speed (default 12 MHz)
-
-
-Name:   raspidac3
-Info:   Configures the RaspiDAV Rev.3x audio card
-Load:   dtoverlay=raspidac3
-Params: <None>
 
 
 Name:   rotary-encoder
@@ -1730,9 +1743,17 @@ Params: txd1_pin                GPIO pin for TXD1 (14, 32 or 40 - default 14)
         rxd1_pin                GPIO pin for RXD1 (15, 33 or 41 - default 15)
 
 
+Name:   upstream
+Info:   Allow usage of downstream .dtb with upstream kernel. Comprises
+        vc4-kms-v3d, dwc2 and upstream-aux-interrupt overlays.
+Load:   dtoverlay=upstream
+Params: <None>
+
+
 Name:   upstream-aux-interrupt
 Info:   Allow usage of downstream .dtb with upstream kernel by binding AUX
-        devices directly to the shared AUX interrupt line.
+        devices directly to the shared AUX interrupt line. One of the parts
+        of the 'upstream' overlay
 Load:   dtoverlay=upstream-aux-interrupt
 Params: <None>
 
