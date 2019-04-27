@@ -531,6 +531,59 @@ Load:   dtoverlay=dpi24
 Params: <None>
 
 
+Name:   draws
+Info:   Configures the NW Digital Radio DRAWS Hat
+
+        The board includes an ADC to measure various board values and also
+        provides two analog user inputs on the expansion header.  The ADC
+        can be configured for various sample rates and gain values to adjust
+        the input range.  Tables describing the two parameters follow.
+
+        ADC Gain Values:
+            0 = +/- 6.144V
+            1 = +/- 4.096V
+            2 = +/- 2.048V
+            3 = +/- 1.024V
+            4 = +/- 0.512V
+            5 = +/- 0.256V
+            6 = +/- 0.256V
+            7 = +/- 0.256V
+
+        ADC Datarate Values:
+            0 = 128sps
+            1 = 250sps
+            2 = 490sps
+            3 = 920sps
+            4 = 1600sps (default)
+            5 = 2400sps
+            6 = 3300sps
+            7 = 3300sps
+Load:   dtoverlay=draws,<param>=<val>
+Params: draws_adc_ch4_gain      Sets the full scale resolution of the ADCs
+                                input voltage sensor (default 1)
+
+        draws_adc_ch4_datarate  Sets the datarate of the ADCs input voltage
+                                sensor
+
+        draws_adc_ch5_gain      Sets the full scale resolution of the ADCs
+                                5V rail voltage sensor (default 1)
+
+        draws_adc_ch5_datarate  Sets the datarate of the ADCs 4V rail voltage
+                                sensor
+
+        draws_adc_ch6_gain      Sets the full scale resolution of the ADCs
+                                AIN2 input (default 2)
+
+        draws_adc_ch6_datarate  Sets the datarate of the ADCs AIN2 input
+
+        draws_adc_ch7_gain      Sets the full scale resolution of the ADCs
+                                AIN3 input (default 2)
+
+        draws_adc_ch7_datarate  Sets the datarate of the ADCs AIN3 input
+
+        alsaname                Name of the ALSA audio device (default "draws")
+
+
 Name:   dwc-otg
 Info:   Selects the dwc_otg USB controller driver which has fiq support. This
         is the default on all except the Pi Zero which defaults to dwc2.
@@ -869,6 +922,12 @@ Params: speed                   Display SPI bus speed
         ledgpio                 GPIO used to control backlight
 
 
+Name:   i-sabre-q2m
+Info:   Configures the Audiophonics I-SABRE Q2M DAC
+Load:   dtoverlay=i-sabre-q2m
+Params: <None>
+
+
 Name:   i2c-bcm2708
 Info:   Fall back to the i2c_bcm2708 driver for the i2c_arm bus.
 Load:   dtoverlay=i2c-bcm2708
@@ -939,6 +998,8 @@ Params: abx80x                  Select one of the ABx80x family:
 
         pcf8563                 Select the PCF8563 device
 
+        rv3028                  Select the Micro Crystal RV3028 device
+
         addr                    Sets the address for the RTC. Note that the
                                 device must be configured to use the specified
                                 address.
@@ -947,10 +1008,13 @@ Params: abx80x                  Select one of the ABx80x family:
                                 "schottky" (ABx80x only)
 
         trickle-resistor-ohms   Resistor value for trickle charge (DS1339,
-                                ABx80x)
+                                ABx80x, RV3028)
 
         wakeup-source           Specify that the RTC can be used as a wakeup
                                 source
+
+        backup-switchover-mode  Backup power supply switch mode. Must be 0 for
+                                off or 1 for Vdd < VBackup (RV3028 only)
 
 
 Name:   i2c-rtc-gpio
@@ -1030,6 +1094,9 @@ Params: addr                    Set the address for the BME280, BMP280, DS1621,
 
         lm75addr                Deprecated - use addr parameter instead
 
+        max17040                Select the Maxim Integrated MAX17040 battery
+                                monitor
+
         sht3x                   Select the Sensiron SHT3x temperature and
                                 humidity sensor. Valid addresses 0x44-0x45,
                                 default 0x44
@@ -1080,6 +1147,17 @@ Name:   i2s-gpio28-31
 Info:   move I2S function block to GPIO 28 to 31
 Load:   dtoverlay=i2s-gpio28-31
 Params: <None>
+
+
+Name:   ilitek251x
+Info:   Enables I2C connected Ilitek 251x multiple touch controller using
+        GPIO 4 (pin 7 on GPIO header) for interrupt.
+Load:   dtoverlay=ilitek251x,<param>=<val>
+Params: interrupt               GPIO used for interrupt (default 4)
+        sizex                   Touchscreen size x, horizontal resolution of
+                                touchscreen (in pixels)
+        sizey                   Touchscreen size y, vertical resolution of
+                                touchscreen (in pixels)
 
 
 Name:   iqaudio-dac
@@ -1196,6 +1274,15 @@ Params: ltc2941                 Select the ltc2941 device
                                 - Default value is 128
                                 - the exponent is in the range 0-7 (default 7)
                                 See the datasheet for more information.
+
+
+Name:   max98357a
+Info:   Configures the Maxim MAX98357A I2S DAC
+Load:   dtoverlay=max98357a,<param>=<val>
+Params: no-sdmode               Driver does not manage the state of the DAC's
+                                SD_MODE pin (i.e. chip is always on).
+        sdmode-pin              integer, GPIO pin connected to the SD_MODE input
+                                of the DAC (default GPIO4 if parameter omitted).
 
 
 Name:   mbed-dac
@@ -1725,6 +1812,7 @@ Info:   Overlay for the NXP SC16IS750 UART with I2C Interface
 Load:   dtoverlay=sc16is750-i2c,<param>=<val>
 Params: int_pin                 GPIO used for IRQ (default 24)
         addr                    Address (default 0x48)
+        xtal                    On-board crystal frequency (default 14745600)
 
 
 Name:   sc16is752-i2c
@@ -1784,6 +1872,9 @@ Params: sdio_overclock          SDIO Clock (in MHz) to use when the MMC
 
         gpios_34_37             Select GPIOs 34-37 for 1-bit mode. Must be used
                                 with bus_width=1.
+
+        gpios_34_39             Select GPIOs 34-39 for 4-bit mode. Must be used
+                                with bus_width=4 (the default).
 
 
 Name:   sdio-1bit
@@ -2100,6 +2191,12 @@ Load:   dtoverlay=uart1,<param>=<val>
 Params: txd1_pin                GPIO pin for TXD1 (14, 32 or 40 - default 14)
 
         rxd1_pin                GPIO pin for RXD1 (15, 33 or 41 - default 15)
+
+
+Name:   udrc
+Info:   Configures the NW Digital Radio UDRC Hat
+Load:   dtoverlay=udrc,<param>=<val>
+Params: alsaname                Name of the ALSA audio device (default "udrc")
 
 
 Name:   upstream
